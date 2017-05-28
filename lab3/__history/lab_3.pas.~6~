@@ -1,0 +1,231 @@
+unit lab_3;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, StdCtrls, Buttons, Grids, Math, ExtCtrls, jpeg, Menus;
+
+type
+  TForm1 = class(TForm)
+    Label1: TLabel;
+    Edit1: TEdit;
+    StringGrid1: TStringGrid;
+    StringGrid2: TStringGrid;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label7: TLabel;
+    Label9: TLabel;
+    Label8: TLabel;
+    StringGrid3: TStringGrid;
+    StringGrid4: TStringGrid;
+    StringGrid5: TStringGrid;
+    Button1: TButton;
+    procedure Clean;
+    procedure FillMatrix;
+    procedure FillComb;
+    procedure Edit1Change(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+
+   end;
+
+var
+  Form1: TForm1;
+  d,x,i,j,k,t0,ti,n,np,y,r,l,t,p: smallint;
+  good:boolean;
+
+implementation
+
+//uses Unit2;
+
+{$R *.dfm}
+
+//процедура побудови утворюючої матриці
+procedure TForm1.FillMatrix;
+label lab;
+begin
+{потрібно заповнити матрицю перевірочними символами,
+де к-ть 1 в них має бути не менше d-1,
+а відсьань між будь-якими двома не менше d-2}
+
+r:=d-1;
+//проміжні обчислення: у третю таблицю виписуєм усі можливі
+//двійкові комбінаії з re розрядів(де re - к-ть надлишк символів)
+
+{ми не використовуємо границі для обрахунку к-ті надлишк
+символів,а натомість почергово збільшуємо вже обраний re:=d-1
+доки все пройде успішно і на мітку lab не повернемося}
+lab:
+with stringgrid3 do
+begin
+//встановлюєм к-ть стовпців рівний re
+ colcount:=r;
+//всього таких комб. буде 2 в степені re(т.ч. і стільки рядків)
+ x:=round(power(2,r));
+ RowCount:=x;
+//заповнюєм цю табл. остачамі від ділення цих чисел на 2
+ for j:=0 to x-1 do
+  begin
+   y:=j;
+    for i:=r-1 downto 0 do
+    begin
+     Cells[i,j]:=inttostr(y mod 2);
+     y:=y div 2;
+    end;
+  end;
+ end;
+
+//проміжні обчислення: із щойно отриманої табл. необх.
+ //вибрати ті, в яких к-ть одиниць не менша d-1
+stringgrid4.ColCount:=r;
+p:=0;
+//перебираєм усі записи
+for i:=1 to x do
+ begin
+//обнуляєм наш параметр
+  t:=0;
+//перевірям скільки в кожному рядку є символів 1(як знайшли - збільш. наш t)
+  for j:=0 to r-1 do if stringgrid3.Cells[j,i-1]='1' then inc(t);
+  //перевіряем чи к-ть одиниць не менша d-1
+    if t>=d-1 then
+   begin
+   //переписуєм запис у нову таблицю у p-ий рядок
+    for j:=0 to r-1 do stringgrid4.Cells[j,p]:=stringgrid3.Cells[j,i-1];
+   //збільш p, щоб наступну комб не записати у той самий рядок
+    inc(p);
+    end;
+  end;
+ stringgrid4.RowCount:=p;
+
+//будуємо одиничну матрицю на початку матриці
+for i:=1 to n do for j:=1 to n do if i=j then stringgrid1.cells[i-1,j-1]:='1' else stringgrid1.Cells[i-1,j-1]:='0';
+
+
+//доповнюєми утв. матрицю перевірочними символами
+//для цього для початку переписуєм першу комб з тих, що шукали з вагою >=d-1
+ for j:=0 to r-1 do stringgrid1.Cells[n+j,0]:=stringgrid4.Cells[j,0];
+ l:=1;
+//повторюєм цикл поки всі рядки утв. матриці не заповнені
+//де l буде вказувати на номер поточного рядку, що заповнюється (тобто вихід при l=n, де n-к-ть інф. символів)
+ repeat
+ //перебираєм всі комбінації з вагою >=d-1
+  for i:=0 to p-1 do
+  begin
+  //в утвор. матриці відстань між будь-якими 2-ма комб. з перевірочних символів
+  //має бути не менша d-2
+  //тому перебираємо комб., які вже записані
+   for k:=0 to l-1 do
+   begin
+   t:=0;
+   good:=false;
+  //і перевіряємо к-ть розрядів, в яких вони відрізняються
+   for j:=0 to r-1 do if stringgrid4.Cells[j,i]<>stringgrid1.Cells[n+j,k] then inc(t);
+  //якщо менше ніж у d-2 прериваєм цей цикл з перевіркою(тобто good не набуде true)
+   if t<d-2 then break;
+   good:=true;
+   end;
+  //якщо у всіх перевірках ми отримали d-2 і більше, то good буде true
+    if good then
+    begin
+      //преписуєм запис у нашу утв. матрицю(під номером l,який і збільшуємо)
+   inc(l);
+     for j:=0 to r-1 do stringgrid1.Cells[n+j,l-1]:=stringgrid4.Cells[j,i];
+     //і перериваєм цикл, щоб не пройшли всі ітерації
+   break;
+    end;
+  end;
+ //бо якщо пройшли всі ітерації і іпотрібної комб. не знайдено
+ //робим висновок, що ми обрали неточну к-ть надлишк. символів
+  if i=p then
+   begin
+    //очищуєм матрицю
+   clean;
+//збільш к-ть надлишк симв і переходимо на мітку lab
+    inc(r);
+    goto lab;
+   end;
+ until (l>=n);
+
+//виводимо
+  label9.Caption:='Надлишк. символів, r='+inttostr(r);
+  stringgrid1.ColCount:=r+n;
+  stringgrid2.colCount:=r+n;
+end;
+
+//процедура знаходження комбінацій з утв. матриці
+procedure TForm1.FillComb;
+begin
+//для цього необхідно провести усеможливі сумування рядків утв. матриці
+//щоб знати яким чином сумувати, знайдемо всі двійк комб з n розядів(n- к-ть інф симв.)
+//вже відома процедура заповнення остачами від ділення
+with stringgrid5 do
+begin
+ colcount:=n;
+ x:=round(power(2,n));
+ RowCount:=x;
+ for j:=0 to x-1 do
+  begin
+   y:=j;
+    for i:=0 to n-1 do
+    begin
+     Cells[i,j]:=inttostr(y mod 2);
+     y:=y div 2;
+    end;
+  end;
+ end;
+
+//к-ть рядків (тобто і к-ть комб) встановлюєм np(вводиться)
+stringgrid2.RowCount:=np;
+//перша комб. нульова
+for j:=0 to x do for i:=0 to n+r-1 do stringgrid2.Cells[i,j]:='0';
+//перебираєм рядки (допоміжної табл для сумування)
+for i:=1 to x-1 do
+//перебираєм самі комб
+for j:=0 to n-1 do
+//додаєм за модулем 2 номери тих рядки утворючої табл, на місці яких в допоміжних комб. є символ 1
+if stringgrid5.Cells[j,i]='1' then
+for k:=0 to n+r-1 do
+//додаєм наступним чином(переписуємо ті рядки один на одну і якщо при переписувані накладаються
+//однакові цифри, на тому місці пишемо 0, шнакше 1)
+//бо 1+1=0 0+0=0 1+0=1 0+1=1
+if stringgrid2.Cells[k,i]=stringgrid1.Cells[k,j] then
+stringgrid2.Cells[k,i]:='0' else stringgrid2.Cells[k,i]:='1';
+end;
+
+//процедура просто для очищення таблиць
+procedure Tform1.clean;
+begin
+ for i:=0 to n do for j:=0 to n+r do stringgrid1.cells[j,i]:='';
+ for i:=0 to np do for j:=0 to n+r-1 do stringgrid2.cells[j,i]:='';
+end;
+
+
+//обробка змін у вікні 1
+procedure TForm1.Edit1Change(Sender: TObject);
+begin
+
+  np:=strtoint(edit1.Text);
+
+  if np<1 then
+            edit1.Text:='1';
+  clean;
+
+  for i:=1 to np do
+    if power(2,i)>=np then break;
+  n:=i;
+
+
+  label7.Caption:='Інформ. символів, k='+inttostr(n);
+  stringgrid1.RowCount:=n;
+  ti := 1;
+  d:=2*ti+1;
+  label8.Caption:='Мінім. відстань, d='+inttostr(d);
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+  FillMatrix;
+  FillComb;
+end;
+
+end.
