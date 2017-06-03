@@ -23,6 +23,7 @@ type
     Button1: TButton;
     StringGrid6: TStringGrid;
     StringGrid7: TStringGrid;
+    Label2: TLabel;
     procedure Clean;
     procedure FillMatrix;
     procedure FillComb;
