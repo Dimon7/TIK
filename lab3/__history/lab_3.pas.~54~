@@ -21,9 +21,13 @@ type
     StringGrid4: TStringGrid;
     StringGrid5: TStringGrid;
     Button1: TButton;
+    StringGrid6: TStringGrid;
+    StringGrid7: TStringGrid;
     procedure Clean;
     procedure FillMatrix;
     procedure FillComb;
+    procedure FillFail;
+    procedure Plusing;
     procedure Edit1Change(Sender: TObject);
     procedure Button1Click(Sender: TObject);
 
@@ -38,6 +42,57 @@ implementation
 
 
 {$R *.dfm}
+ procedure TForm1.FillFail;
+  var cx,ch,l,k : integer;
+  begin
+  k:=0;
+
+  l := n+d;
+  stringgrid6.RowCount:=l;
+  stringgrid6.ColCount:=l;
+
+    for cx:=0 to l do
+      for ch:=0 to l do
+
+        begin
+
+          stringgrid6.Cells[cx,ch]:='0';
+
+        end;
+
+        for cx:=0 to l do
+
+        begin
+
+          stringgrid6.Cells[cx,k]:='1';
+          inc(k);
+        end;
+  end;
+
+  procedure TForm1.Plusing;
+    var i,j,l,cx,ch,mj,mk,mi,rc,cc,m : integer;
+        b : String;
+
+  begin
+    m:=0;
+    StringGrid7.ColCount:= n+d;
+    StringGrid7.RowCount:= StringGrid2.RowCount*StringGrid6.RowCount;
+    rc:= StringGrid6.RowCount;
+    cc:= StringGrid6.ColCount;
+
+
+    for i:=0 to stringgrid2.RowCount do
+      for j:=0 to rc do
+      begin
+        for k:=0 to cc do
+          begin
+            if(StringGrid2.Cells[i,k]<>StringGrid6.Cells[j,k]) then b:='1' else b:='0';
+            StringGrid7.Cells[m,k]:=b;
+          end;
+       inc(m);
+      end;
+
+  end;
 
 procedure TForm1.FillMatrix;
   label lab;
@@ -107,10 +162,13 @@ procedure TForm1.FillMatrix;
      end;
    until (l>=n);
 
-    label9.Caption:='Надлишк. символів, r='+inttostr(r);
+    label9.Caption:='r='+inttostr(r);
     stringgrid1.ColCount:=r+n;
     stringgrid2.colCount:=r+n;
   end;
+
+
+
 
   procedure TForm1.FillComb;
   begin
@@ -162,17 +220,19 @@ procedure TForm1.FillMatrix;
     n:=i;
 
 
-    label7.Caption:='Інформ. символів, k='+inttostr(n);
+    label7.Caption:='k='+inttostr(n);
     stringgrid1.RowCount:=n;
     ti := 1;
     d:=2*ti+1;
-    label8.Caption:='Мінім. відстань, d='+inttostr(d);
+    label8.Caption:='d='+inttostr(d);
   end;
 
   procedure TForm1.Button1Click(Sender: TObject);
   begin
     FillMatrix;
     FillComb;
+    FillFail;
+    Plusing;
   end;
 
 end.

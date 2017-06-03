@@ -1,9 +1,9 @@
 object Form1: TForm1
   Left = 217
   Top = 133
-  Caption = 'Laba4'
-  ClientHeight = 444
-  ClientWidth = 881
+  Caption = 'Laba3'
+  ClientHeight = 458
+  ClientWidth = 1009
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -41,22 +41,22 @@ object Form1: TForm1
     Caption = #1050#1086#1084#1073#1110#1085#1072#1094#1110#1111
   end
   object Label7: TLabel
-    Left = 0
-    Top = 306
+    Left = 20
+    Top = 250
     Width = 3
     Height = 13
     Transparent = True
   end
   object Label9: TLabel
-    Left = 2
-    Top = 340
+    Left = 20
+    Top = 285
     Width = 3
     Height = 13
     Transparent = True
   end
   object Label8: TLabel
-    Left = 0
-    Top = 322
+    Left = 20
+    Top = 270
     Width = 3
     Height = 13
     Transparent = True
@@ -72,6 +72,7 @@ object Form1: TForm1
     OnChange = Edit1Change
   end
   object StringGrid1: TStringGrid
+    AlignWithMargins = True
     Left = 10
     Top = 61
     Width = 200
@@ -95,13 +96,14 @@ object Form1: TForm1
     TabOrder = 2
   end
   object StringGrid3: TStringGrid
-    Left = 419
-    Top = 62
+    Left = 707
+    Top = 61
     Width = 209
     Height = 257
     DefaultColWidth = 40
     DefaultRowHeight = 15
     TabOrder = 3
+    Visible = False
     RowHeights = (
       15
       15
@@ -110,22 +112,24 @@ object Form1: TForm1
       14)
   end
   object StringGrid4: TStringGrid
-    Left = 631
-    Top = 24
+    Left = 831
+    Top = 42
     Width = 242
     Height = 181
     DefaultColWidth = 40
     DefaultRowHeight = 15
     TabOrder = 4
+    Visible = False
   end
   object StringGrid5: TStringGrid
-    Left = 634
-    Top = 223
+    Left = 842
+    Top = 250
     Width = 239
     Height = 181
     DefaultColWidth = 40
     DefaultRowHeight = 15
     TabOrder = 5
+    Visible = False
   end
   object Button1: TButton
     Left = 198
@@ -135,5 +139,16 @@ object Form1: TForm1
     Caption = 'Go'
     TabOrder = 6
     OnClick = Button1Click
+  end
+  object StringGrid6: TStringGrid
+    Left = 432
+    Top = 61
+    Width = 121
+    Height = 285
+    DefaultColWidth = 12
+    DefaultRowHeight = 15
+    FixedCols = 0
+    FixedRows = 0
+    TabOrder = 7
   end
 end

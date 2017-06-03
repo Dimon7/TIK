@@ -81,15 +81,15 @@ implementation
     cc:= StringGrid6.ColCount;
 
 
-    for i:=0 to stringgrid2.RowCount-1 do
-      for j:=0 to rc-1 do
+    for i:=0 to stringgrid2.RowCount do
+      for j:=0 to rc do
       begin
-        for k:=0 to cc-1 do
+        for k:=0 to cc do
           begin
-            if(StringGrid2.Cells[k,i]<>StringGrid6.Cells[k,j]) then b:='1' else b:='0';
-            StringGrid7.Cells[k,m]:=b;
+            if(StringGrid6.Cells[i,k]<>StringGrid2.Cells[j,k]) then k:='1' else k:='0';
+            StringGrid7.Cells[m,k]:=k;
           end;
-       inc(m);
+          inc(m);
       end;
 
   end;

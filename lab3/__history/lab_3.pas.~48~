@@ -70,27 +70,24 @@ implementation
   end;
 
   procedure TForm1.Plusing;
-    var i,j,l,cx,ch,mj,mk,mi,rc,cc,m : integer;
-        b : String;
+    var l,cx,ch,mj,mk,mi : integer;
+        k : String;
 
   begin
-    m:=0;
+
     StringGrid7.ColCount:= n+d;
     StringGrid7.RowCount:= StringGrid2.RowCount*StringGrid6.RowCount;
-    rc:= StringGrid6.RowCount;
-    cc:= StringGrid6.ColCount;
+    mi:= StringGrid7.RowCount;
+    mj:= StringGrid7.ColCount;
 
 
-    for i:=0 to stringgrid2.RowCount-1 do
-      for j:=0 to rc-1 do
-      begin
-        for k:=0 to cc-1 do
-          begin
-            if(StringGrid2.Cells[k,i]<>StringGrid6.Cells[k,j]) then b:='1' else b:='0';
-            StringGrid7.Cells[k,m]:=b;
-          end;
-       inc(m);
-      end;
+//    for i:=0 to stringgrid2.RowCount do
+//      for cx:=0 to l do
+//        for ch:=0 to l do
+//          begin
+//            if(StringGrid6.Cells[cx,ch]<>StringGrid2.Cells[i,ch]) then k:='1' else k:='0';
+//            StringGrid7.Cells[cx,ch]:=k;
+//          end;
 
   end;
 
